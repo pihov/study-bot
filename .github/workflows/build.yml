@@ -1,0 +1,60 @@
+name: Build StudyBot
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            name: Windows
+          - os: macos-latest
+            name: Mac
+          - os: ubuntu-latest
+            name: Linux
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install tkinter (Linux only)
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install -y python3-tk
+
+      - name: Install dependencies
+        run: |
+          pip install -r Cross-platform/requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable
+        run: >
+          pyinstaller --onefile --windowed --name "StudyBot"
+          --hidden-import selenium.webdriver.chrome.webdriver
+          --hidden-import selenium.webdriver.chrome.service
+          --hidden-import selenium.webdriver.chrome.options
+          --hidden-import selenium.webdriver.common.service
+          --hidden-import selenium.webdriver.remote.webdriver
+          --hidden-import webdriver_manager.chrome
+          --hidden-import webdriver_manager.core.os_manager
+          --hidden-import webdriver_manager.core.download_manager
+          --hidden-import duckduckgo_search
+          --hidden-import matplotlib
+          --hidden-import matplotlib.backends.backend_tkagg
+          "Cross-platform/Cross-Plat-app.py"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: StudyBot-${{ matrix.name }}
+          path: dist/
