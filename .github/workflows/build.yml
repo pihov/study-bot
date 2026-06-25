@@ -34,7 +34,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r Cross-platform/requirements.txt
+          pip install -r Cross-Platform/requirements.txt
           pip install pyinstaller
 
       - name: Build executable
@@ -51,7 +51,7 @@ jobs:
           --hidden-import duckduckgo_search
           --hidden-import matplotlib
           --hidden-import matplotlib.backends.backend_tkagg
-          "Cross-platform/Cross-Plat-app.py"
+          "Cross-Platform/Cross-Plat-App.py"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
