@@ -156,6 +156,16 @@ FONT_SMALL = (_FF, 10)
 FONT_MONO  = (_FM, 10)
 FONT_BTN   = (_FF, 11, "bold")
 
+def _mk_btn(parent, **kw):
+    """Wrapper around tk.Button that fixes macOS active-state highlight."""
+    bg = kw.get("bg", PANEL)
+    fg = kw.get("fg", TEXT)
+    kw.setdefault("activebackground", bg)
+    kw.setdefault("activeforeground", fg)
+    return _mk_btn(parent, **kw)
+
+
+
 # ====================== PROMPTS ======================
 
 TOPIC_PROMPT = """
@@ -1193,7 +1203,7 @@ class StudyBotApp:
         )
         if width:
             kw["width"] = width
-        b = tk.Button(parent, **kw)
+        b = _mk_btn(parent, **kw)
 
         def _lighten(c):
             r  = min(255, int(c[1:3], 16) + 30)
@@ -1398,7 +1408,7 @@ class StudyBotApp:
             font=FONT_SMALL, bg=BG, fg=MUTED)
         self.visuals_status_lbl.pack(side="left")
 
-        self.visuals_regen_btn = tk.Button(hdr, text="↻  Rebuild Visuals",
+        self.visuals_regen_btn = _mk_btn(hdr, text="↻  Rebuild Visuals",
             font=FONT_SMALL, bg=PANEL, fg=TEXT, relief="flat", bd=0,
             activebackground=BLUE, activeforeground=TEXT, cursor="hand2",
             padx=10, pady=3, command=self._regenerate_visuals)
@@ -1795,7 +1805,7 @@ class StudyBotApp:
         self.answer_var = tk.StringVar()
         self.opt_btns   = {}
         for letter in "ABCD":
-            btn = tk.Button(
+            btn = _mk_btn(
                 self.mc_frame, text=f"  {letter}.  ", font=FONT_BODY,
                 bg=PANEL, fg=TEXT, relief="flat", bd=0,
                 activebackground=BLUE, activeforeground=TEXT,
@@ -1815,7 +1825,7 @@ class StudyBotApp:
         self.sata_btns = {}
         for letter in "ABCDE":
             var = tk.BooleanVar(value=False)
-            btn = tk.Button(
+            btn = _mk_btn(
                 self.sata_frame, text=f"  {letter}.  ", font=FONT_BODY,
                 bg=PANEL, fg=TEXT, relief="flat", bd=0,
                 activebackground=BLUE, activeforeground=TEXT,
@@ -2111,7 +2121,7 @@ class StudyBotApp:
         tbar.pack(fill="x", padx=16, pady=(0, 4))
 
         def tbtn(label, cmd):
-            b = tk.Button(tbar, text=label,
+            b = _mk_btn(tbar, text=label,
                           font=(_FF, 9, "bold"),
                           bg=PANEL, fg=TEXT, relief="flat", bd=0,
                           activebackground=BLUE, activeforeground=TEXT,
@@ -3238,7 +3248,7 @@ class StudyBotApp:
             text="Generate study material first.",
             font=FONT_SMALL, bg=BG, fg=MUTED)
         self.chat_topic_lbl.pack(side="left", padx=10)
-        tk.Button(hdr, text="Clear Chat", font=FONT_SMALL, bg=PANEL, fg=MUTED,
+        _mk_btn(hdr, text="Clear Chat", font=FONT_SMALL, bg=PANEL, fg=MUTED,
                   relief="flat", bd=0, padx=8, pady=2, cursor="hand2",
                   command=self._clear_chat).pack(side="right")
 
@@ -3266,7 +3276,7 @@ class StudyBotApp:
         send_row.pack(fill="x", padx=8, pady=(0, 8))
         tk.Label(send_row, text="Enter to send  |  Shift+Enter for new line",
                  font=FONT_SMALL, bg=PANEL, fg=MUTED).pack(side="left")
-        self.chat_send_btn = tk.Button(send_row, text="Send  ->",
+        self.chat_send_btn = _mk_btn(send_row, text="Send  ->",
                                         font=FONT_SMALL, bg=BLUE, fg=TEXT,
                                         relief="flat", bd=0, padx=12, pady=4,
                                         cursor="hand2",
