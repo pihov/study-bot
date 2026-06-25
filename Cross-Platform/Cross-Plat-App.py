@@ -162,6 +162,8 @@ def _mk_btn(parent, **kw):
     fg = kw.get("fg", TEXT)
     kw.setdefault("activebackground", bg)
     kw.setdefault("activeforeground", fg)
+    kw.setdefault("highlightthickness", 0)
+    kw.setdefault("overrelief", "flat")
     return tk.Button(parent, **kw)
 
 
@@ -1199,6 +1201,7 @@ class StudyBotApp:
             text=text, command=cmd, font=font,
             bg=color, fg=TEXT, relief="flat", cursor="hand2",
             activebackground=color, activeforeground=TEXT,
+            highlightthickness=0, overrelief="flat",
             height=height, state=state, bd=0, padx=14,
         )
         if width:
