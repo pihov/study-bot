@@ -162,7 +162,7 @@ def _mk_btn(parent, **kw):
     fg = kw.get("fg", TEXT)
     kw.setdefault("activebackground", bg)
     kw.setdefault("activeforeground", fg)
-    return _mk_btn(parent, **kw)
+    return tk.Button(parent, **kw)
 
 
 
